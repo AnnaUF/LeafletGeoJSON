@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { 
+            height: 800px;
+            width: 1400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([48.8566, 2.3522], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        var marker = L.marker([48.8584, 2.2945]).addTo(map);
+        var popup = L.popup()
+    .setLatLng([48.8584, 2.2945])
+    .setContent("I am the Eiffel Tower standalone popup.")
+    .openOn(map);
+    var circle = L.circle([48.8738, 2.295], {
+    color: 'blue',
+    fillColor: '#a07',
+    fillOpacity: 0.5,
+    radius: 500
+}).addTo(map);
+circle.bindPopup("I am the Arc de Triomphe and surroundings.");
+var popup = L.popup();
+var polygon = L.polygon([
+    [48.871591, 2.376667],
+    [48.867526, 2.364651],
+    [48.852901, 2.371346],
+    [48.848891, 2.398468],
+]).addTo(map);
+polygon.bindPopup("I am the 11th Arrondissment (ish).");
+//(copilot was really bad at polygon making, corrdinates are from google earth instead and i did not put enough to be accurate)
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+// Initialize the map
+var map = L.map('mapid').setView([51.505, -0.09], 13);
+
+// Define your tile layer and add it to the map
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+}).addTo(map);
+
+// Define your GeoJSON data
+var geojsonFeature = {
+    "type": "Feature",
+    "properties": {
+        "name": "Megacities",
+        "popupContent": "This is a megacity"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [-104.99404, 39.75621]
+    }
+};
+
+// Add the GeoJSON data to the map
+L.geoJSON(geojsonFeature).addTo(map);
+map.on('click', onMapClick);
+    </script>
+</body>
+</html>
