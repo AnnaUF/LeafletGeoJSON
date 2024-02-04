@@ -68,8 +68,25 @@ var geojsonFeature = {
 };
 
 // Add the GeoJSON data to the map
-L.geoJSON(geojsonFeature).addTo(map);
-map.on('click', onMapClick);
+document.addEventListener('DOMContentLoaded', function() {
+  var map = L.map('map (2) (3).geojson').setView([51.505, -0.09], 13);
+
+fetch('map (2) (3).geojson')
+    .then(response => response.json())
+    .then(data => {
+        L.geoJSON(data, {
+            onEachFeature: function (feature, layer) {
+                if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                    var bounds = layer.getBounds();
+                    var center = bounds.getCenter();
+                    L.marker(center).addTo(map (2) (3).geojson);
+                }
+            }
+        }).addTo(map);
+    })
+    .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+    });
     </script>
 </body>
 </html>
